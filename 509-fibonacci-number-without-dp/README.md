@@ -26,7 +26,7 @@ F(n) = F(n - 1) + F(n - 2), for n &gt; 1.
 <pre><strong>Input:</strong> n = 4
 <strong>Output:</strong> 3
 <strong>Explanation:</strong> F(4) = F(3) + F(2) = 2 + 1 = 3.
-</pre>
+</pre> 
 
 <p>&nbsp;</p>
 <p><strong>Constraints:</strong></p>
