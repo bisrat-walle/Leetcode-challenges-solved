@@ -1,35 +1,68 @@
+class UnionFind:
+    def __init__(self):
+        self.representative = {}
+        self.rank = {}
+    
+    def find(self, i):
+        r = self.representative[i]
+        if r == i:
+            return r
+        self.representative[i] = self.find(r)
+        return self.representative[i]
+    
+    def make_set(self, key):
+        if key not in self.representative.keys():
+            self.representative[key] = key
+            self.rank[key] = 1
+    
+    def union(self, i, j):
+        f1 = self.find(i)
+        f2 = self.find(j)
+        if f1 == f2:
+            return
+        
+        r1 = self.rank[f1]
+        r2 = self.rank[f2]
+        if r1 == r2:
+            self.representative[f2]= f1
+            self.rank[f1] += 1
+            return
+        if r1 > r2:
+            self.representative[f2] = f1
+        else:
+            self.representative[f1] = f2
+        
+    def toDict(self):
+        dic = {}
+        for i in self.representative.values():
+            dic[i] = set((i,))
+        for i in self.representative.keys():
+            dic[self.find(i)].add(i)
+        return dic
+
+
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-        
-        
-        
-        visited = set()
-        
-        
-        def dfs(i, j):
-            if (i, j) in visited or grid[i][j] == 0:
-                return 0
-            area = 1
-            if grid[i][j] == 1:
-                visited.add((i, j))
-                if i >= 1:
-                    area += dfs(i-1, j)
-                if i < len(grid)-1:
-                    area += dfs(i+1, j)
-                if j >= 1:
-                    area += dfs(i, j-1)
-                if j < len(grid[0])-1:
-                    area += dfs(i, j+1)
-            # print(f"Area from {i, j} is {area}")
-            return area
-        
-        max_area = 0
-        
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
+        row = len(grid)
+        column = len(grid[0]) 
+        union_find = UnionFind()
+        direction_array = [(0, 1), (1, 0), (-1, 0), (0, -1)]
+        is_valid = lambda x, y: (0 <= x < row) and (0 <= y < column)
+        for i in range(row):
+            for j in range(column):
                 if grid[i][j] == 1:
-                    if (i,j) not in visited:
-                        max_area = max(dfs(i, j), max_area)
+                    
+                    union_find.make_set((i, j))
+                    for x, y in direction_array:
+                        i_neigh, j_neigh = i+x, j+y
+                        if is_valid(i_neigh, j_neigh) and grid[i_neigh][j_neigh] == 1:
+                            union_find.make_set((i_neigh, j_neigh))
+                            union_find.union((i, j), (i_neigh, j_neigh))
+                        
+        max_area = 0
+        di = union_find.toDict()
         
-        # print(visited)
+        for i in di.keys():
+            max_area = max(max_area, len(di[i]))
         return max_area
+        
