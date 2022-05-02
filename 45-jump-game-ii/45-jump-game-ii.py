@@ -1,15 +1,13 @@
 class Solution:
     def jump(self, nums: List[int]) -> int:
-        memo = {}
-        def dp(index):
-            if index >= len(nums)-1:
-                return 0
-            if index in memo:
-                return memo[index]
-            memo[index] = float("inf")
-            for i in range(1, nums[index]+1):
-                if index+i not in memo:
-                    memo[index+i] = dp(index+i)
-                memo[index] = min(memo[index], 1+memo[index+i])
-            return memo[index]
-        return dp(0)
+        dp = [float("inf") for i in range(len(nums))]
+        dp[len(nums)-1] = 0
+        for i in reversed(range(0, len(nums)-1)):
+            for j in range(nums[i], 0, -1):
+                temp = i+j
+                if temp > len(nums)-1:
+                    temp = len(nums)-1
+                dp[i] = min(dp[i], 1+dp[temp])
+        
+        
+        return dp[0]
