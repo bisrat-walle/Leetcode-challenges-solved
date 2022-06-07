@@ -3,7 +3,7 @@ class Solution:
         """
         Do not return anything, modify nums1 in-place instead.
         """
-        
+         
         i, j = 0, 0
         temp = []
         while i < m and j < n:
@@ -21,7 +21,6 @@ class Solution:
         while j < n:
             temp.append(nums2[j])
             j += 1
-        # print(temp)
+            
         for i in range(len(nums1)):
             nums1[i] = temp[i]
-        
