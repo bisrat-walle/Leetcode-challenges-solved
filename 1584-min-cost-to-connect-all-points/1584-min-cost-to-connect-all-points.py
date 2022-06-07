@@ -39,30 +39,43 @@ class UnionFind:
         for i in self.representative.keys():
             dic[self.find(i)].add(i)
         return dic
+    
+
 
 
 class Solution:
-    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-        row = len(grid)
-        column = len(grid[0]) 
-        union_find = UnionFind()
-        direction_array = [(0, 1), (1, 0), (-1, 0), (0, -1)]
-        is_valid = lambda x, y: (0 <= x < row) and (0 <= y < column)
-        for i in range(row):
-            for j in range(column):
-                if grid[i][j] == 1:
-                    
-                    union_find.make_set((i, j))
-                    for x, y in direction_array:
-                        i_neigh, j_neigh = i+x, j+y
-                        if is_valid(i_neigh, j_neigh) and grid[i_neigh][j_neigh] == 1:
-                            union_find.make_set((i_neigh, j_neigh))
-                            union_find.union((i, j), (i_neigh, j_neigh))
-                        
-        max_area = 0
-        di = union_find.toDict()
+    def minCostConnectPoints(self, points: List[List[int]]) -> int:
         
-        for i in di.keys():
-            max_area = max(max_area, len(di[i]))
-        return max_area
+        points = [tuple(i) for i in points]
+        
+        def manhattan(firstpoint, secondpoint):
+            return abs(firstpoint[0]-secondpoint[0]) + abs(firstpoint[1]-secondpoint[1])
+        
+        n = len(points)
+        possible_connections = []
+        for i in range(n):
+            for j in range(i+1, n):
+                first_point = points[i]
+                second_point = points[j]
+                weight = manhattan(first_point, second_point)
+                possible_connections.append((weight, first_point, second_point))
+        possible_connections.sort()
+        union_find = UnionFind()
+        an = 0
+        
+        for i in points:
+            union_find.make_set(i)
+        
+        for wieght, first, second in possible_connections:
+            
+            if union_find.find(first) != union_find.find(second):
+                union_find.union(first, second)
+                an += wieght
+        
+        return an
+                
+                
+                
+                
+                
         
