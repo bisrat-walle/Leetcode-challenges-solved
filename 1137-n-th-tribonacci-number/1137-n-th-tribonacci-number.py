@@ -1,13 +1,14 @@
 class Solution:
     def tribonacci(self, n: int) -> int:
-        memo = {}
-        memo[0] = 0
-        memo[1] = 1
-        memo[2] = 1
-        def tri(i):
-            if i not in memo.keys():
-                memo[i] = tri(i-1) + tri(i-2) + tri(i-3)
-            
-            return memo[i]
+        first, second, third = 0, 1, 1
+        if n == 0:
+            return first
+        if n == 1:
+            return second
+        if n == 2:
+            return third
         
-        return tri(n)
+        for _ in range(2, n):
+            first, second, third = second, third, first+second+third
+            # print(first, second, third, "***")
+        return third
