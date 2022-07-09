@@ -10,13 +10,15 @@ class Solution:
         current1, current2 = before, after
         current = head
         while current:
+            temp = current.next
+            current.next = None
             if current.val < x:
-                current1.next = ListNode(current.val)
+                current1.next = current
                 current1 = current1.next
             else:
-                current2.next = ListNode(current.val)
+                current2.next = current
                 current2 = current2.next
-            current = current.next
+            current = temp
         
         current1.next = after.next
         return before.next
