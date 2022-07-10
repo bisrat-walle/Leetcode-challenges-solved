@@ -1,6 +1,5 @@
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
-        
         last = cost[-1]
         before_last = cost[-2]
         n = len(cost)
