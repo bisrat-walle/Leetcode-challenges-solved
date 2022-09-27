@@ -1,19 +1,11 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        cache = {}
-        def rec(current):
-            if current in cache:
-                return cache[current]
-            if current < 0:
-                return float("inf")
-            if current == 0:
-                return 0
-            ans = float("inf")
+        dp = [float("inf")]*(amount+1)
+        dp[0] = 0
+        for i in range(amount+1):
             for coin in coins:
-                ans = min(ans, 1+rec(current-coin))
-            cache[current] = ans
-            return cache[current]
+                remaining = i-coin
+                if remaining >= 0:
+                    dp[i] = min(dp[i], 1+dp[remaining])
+        return dp[-1] if dp[-1] != float("inf") else -1
         
-        res = rec(amount)
-        return -1 if res == float("inf") else res
-            
