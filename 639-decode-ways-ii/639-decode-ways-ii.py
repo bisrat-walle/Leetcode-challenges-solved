@@ -5,22 +5,23 @@ class Solution:
         mapping["2*"] = 6
         mapping["*"] = 9
         mapping["**"] = 15
-        dp = [0]*(len(s)+1)
-        dp[len(s)] = 1
-        dp[len(s)-1] = mapping[s[len(s)-1]] if s[len(s)-1] != "0" else 0
+        first = 1
+        second = mapping[s[len(s)-1]] if s[len(s)-1] != "0" else 0
         mod = 10**9+7
         for i in reversed(range(len(s)-1)):
+            temp = 0
             if s[i] in mapping:
-                dp[i] += (mapping[s[i]]*dp[i+1])%mod
+                temp += (mapping[s[i]]*second)%mod
             if i < len(s)-1:
                 key = s[i:i+2]
                 if key in mapping:
-                    dp[i] += (mapping[key]*dp[i+2])%mod
+                    temp += (mapping[key]*first)%mod
                 elif s[i] == "*":
                     if s[i+1] <= "6":
-                        dp[i] += (2*dp[i+2])%mod
+                        temp += (2*first)%mod
                     else:
-                        dp[i] += dp[i+2]%mod
-        return dp[0]%(mod)
+                        temp += first%mod
+            first, second = second, temp
+        return second%(mod)
                     
                 
