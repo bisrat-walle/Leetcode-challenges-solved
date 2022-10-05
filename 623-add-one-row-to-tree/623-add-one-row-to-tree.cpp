@@ -1,39 +1,56 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def addOneRow(self, root: Optional[TreeNode], val: int, depth: int) -> Optional[TreeNode]:
-        if not root:
-            return
-        if depth == 1:
-            new_root = TreeNode(val)
-            new_root.left = root
-            return new_root
-        queue = deque([root])
-        current_depth = 1
-        while queue:
-            # print(list(map(lambda k: k.val, queue)), dept)
-            if current_depth == depth-1:
-                for _ in range(len(queue)):
-                    current = queue.popleft()
-                    right = current.right
-                    left = current.left
-                    new_left = TreeNode(val)
-                    new_right = TreeNode(val)
-                    new_left.left = left
-                    new_right.right = right
-                    current.left = new_left
-                    current.right = new_right
-                    
-                break
-            for _ in range(len(queue)):
-                current = queue.popleft()
-                if current.left:
-                    queue.append(current.left)
-                if current.right:
-                    queue.append(current.right)
-            current_depth += 1
-        return root
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* addOneRow(TreeNode* root, int val, int depth) {
+        if (depth == 1) {
+            TreeNode* head = new TreeNode(val);
+            head->left = root;
+            return head;
+        }
+        int current_depth = 1;
+        queue<TreeNode*> que;
+        que.push(root);
+        while (!que.empty()) {
+            int n = que.size();
+            if (current_depth == depth-1) {
+                for (int i=0; i < n; i++){
+                    TreeNode* current = que.front();
+                    que.pop();
+                    TreeNode* currentRight = current->right;
+                    TreeNode* currentLeft = current->left;
+                    TreeNode* newLeft = new TreeNode(val);
+                    TreeNode* newRight = new TreeNode(val);
+                    current->left = newLeft;
+                    current->right = newRight;
+                    newLeft->left = currentLeft;
+                    newRight->right = currentRight;
+                }
+                break;
+            }
+            for (int i=0; i < n; i++){
+                TreeNode* current = que.front();
+                que.pop();
+                if (current->left){
+                    que.push(current->left);
+                }
+                if (current->right){
+                    que.push(current->right);
+                }
+            }
+            
+            current_depth++;
+            
+        }
+        return root;
+    }
+};
