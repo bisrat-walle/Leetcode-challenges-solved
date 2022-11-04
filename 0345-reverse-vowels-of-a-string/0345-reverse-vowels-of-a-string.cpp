@@ -1,7 +1,7 @@
 class Solution {
 public:
     string reverseVowels(string s) {
-        set<char> vowels = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
+        unordered_set<char> vowels = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
         vector<int> indexes;
         for (int i=0; i < s.length(); i++){
             if (vowels.count(s[i])) {
