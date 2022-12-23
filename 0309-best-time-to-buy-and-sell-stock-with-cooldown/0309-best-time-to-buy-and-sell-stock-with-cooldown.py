@@ -1,17 +1,10 @@
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
         n = len(prices)
+        dp = [[0, 0] for i in range(n+2)] # buy, sell
         
-        @lru_cache(None)
-        def rec(index, canBuy=True):
-            if index >= n:
-                return 0
-            option1 = rec(index+1, canBuy)
-            if canBuy:
-                option2 = -prices[index] + rec(index+1, False)
-            else:
-                option2 = prices[index] + rec(index+2, True)
+        for i in range(n-1, -1, -1):
+            dp[i][0] = max(dp[i+1][0], -prices[i] + dp[i+1][1])
+            dp[i][1] = max(dp[i+1][1], prices[i] + dp[i+2][0])
             
-            return max(option1, option2)
-        
-        return rec(0)
+        return dp[0][0]
