@@ -1,18 +1,21 @@
 class Solution:
     def minSteps(self, n: int) -> int:
-        written = 1
-        prev = 1
-        rem = n-1
-        op = 0
-        while written < n:
-            if rem%written == 0:
-                op += 2
-                prev = written
-                written += written
-            else:
-                op += 1
-                written += prev
+        
+        if n == 1:
+            return 0
+        
+        @lru_cache(None)
+        def rec(index, prev = None):
+            if index > n:
+                return float("inf")
+            if index == n:
+                return 0
             
-            rem = n - written
-                
-        return op
+            if prev == None:
+                return 2 + rec(index+1, 1)
+            else:
+                option1 = 1 + rec(index+prev, prev)
+                option2 = 2 + rec(index*2, index)
+                return min(option1, option2)
+        
+        return rec(1)
