@@ -2,27 +2,16 @@ class Solution {
 public:
     int ans = 8000000;
     int k1;
-    vector<int> arr;
-    vector<int> ass;
-    
-    int getMax(){
-        int mx = -1;
-        for(int i=0; i < ass.size(); i++){
-            if (mx < ass[i]){
-                mx = ass[i];
-            }
-        }
-        return mx;
-    }
+    vector<int> arr, ass;
     
     void backtrack(int index){
         if (index >= arr.size()){
-            ans = min(ans, getMax());
+            ans = min(ans, *max_element(ass.begin(), ass.end()));
             return;
         }
             
 
-        if (ans <= getMax())
+        if (ans <= *max_element(ass.begin(), ass.end()))
             return;
 
         for(int i=0; i < k1; i++){
@@ -35,16 +24,11 @@ public:
     
     int distributeCookies(vector<int>& cookies, int k) {
         k1 = k;
-        for(int i=0; i < cookies.size(); i++){
-            arr.push_back(cookies[i]);
-        }
-        for(int i=0; i < k; i++){
-            ass.push_back(0);
-        }
-        
+        arr = cookies;
+        sort(arr.rbegin(), arr.rend());
+        ass.resize(k, 0);
         backtrack(0);
         
         return ans;
-        return 0;
     }
 };
